@@ -7,6 +7,12 @@
 // @match        *.myshows.me/*
 // @run-at       document-start
 // @grant        GM_addStyle
+// @icon         https://myshows.me/favicon-32x32.png
+// @author       viruseg
+// @homepageURL  https://github.com/viruseg/MyShowsInterfaceFix
+// @updateURL    https://raw.githubusercontent.com/viruseg/MyShowsInterfaceFix/master/dist/main.js
+// @downloadURL  https://raw.githubusercontent.com/viruseg/MyShowsInterfaceFix/master/dist/main.js
+// @supportURL   https://github.com/viruseg/MyShowsInterfaceFix/issues
 // ==/UserScript==
 
 GM_addStyle(
