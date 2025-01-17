@@ -3,7 +3,7 @@
 ## Установка расширения:
 
 1. Установите расширение **[Tampermonkey](https://www.tampermonkey.net/)** (Альтернатива для Safari: **[UserScripts](https://apps.apple.com/app/userscripts/id1463298887)**)
-2. **[«Установите Скрипт»](https://raw.githubusercontent.com/viruseg/MyShowsInterfaceFix/master/dist/main.js)**
+2. **[«Установите Скрипт»](https://raw.githubusercontent.com/viruseg/MyShowsInterfaceFix/master/dist/main.user.js)**
 
 ## Список изменений:
 
