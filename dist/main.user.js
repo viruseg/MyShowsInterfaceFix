@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Interface fixes on myshows.me
 // @namespace    http://tampermonkey.net/
-// @version      0.11
+// @version      0.12
 // @description  Fixing interface styles on myshows.me
 // @author       viruseg
 // @match        *.myshows.me/*
