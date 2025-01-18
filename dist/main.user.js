@@ -259,7 +259,8 @@ a.episode-col__label:hover
         {
             let wrapper = item.querySelector('.HeaderMenu__link-wrapper');
 
-            if (wrapper.textContent !== 'Сериалы' && wrapper.textContent !== 'Фильмы') return;
+            let textContent = wrapper.querySelector('a').textContent;
+            if (textContent !== 'Сериалы' && textContent !== 'Фильмы') return;
 
             if (item.querySelector('.dropDownButton')) return;
 
