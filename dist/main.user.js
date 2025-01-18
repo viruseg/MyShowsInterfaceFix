@@ -9,8 +9,8 @@
 // @grant        GM_addStyle
 // @icon         https://myshows.me/favicon-32x32.png
 // @homepageURL  https://github.com/viruseg/MyShowsInterfaceFix
-// @updateURL    https://raw.githubusercontent.com/viruseg/MyShowsInterfaceFix/master/dist/main.js
-// @downloadURL  https://raw.githubusercontent.com/viruseg/MyShowsInterfaceFix/master/dist/main.js
+// @updateURL    https://raw.githubusercontent.com/viruseg/MyShowsInterfaceFix/master/dist/main.user.js
+// @downloadURL  https://raw.githubusercontent.com/viruseg/MyShowsInterfaceFix/master/dist/main.user.js
 // @supportURL   https://github.com/viruseg/MyShowsInterfaceFix/issues
 // ==/UserScript==
 
