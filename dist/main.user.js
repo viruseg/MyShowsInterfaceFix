@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Interface fixes on myshows.me
 // @namespace    http://tampermonkey.net/
-// @version      0.12
+// @version      0.13
 // @description  Fixing interface styles on myshows.me
 // @author       viruseg
 // @match        *.myshows.me/*
@@ -262,13 +262,18 @@ a.episode-col__label:hover
             let textContent = wrapper.querySelector('a').textContent;
             if (textContent !== 'Сериалы' && textContent !== 'Фильмы') return;
 
-            if (item.querySelector('.dropDownButton')) return;
+            let dropDownButton = item.querySelector('.dropDownButton');
+
+            if (!dropDownButton)
+            {
+                dropDownButton = document.createElement('div');
+                dropDownButton.classList.add('dropDownButton');
+                dropDownButton.textContent = '▾';
+                wrapper.append(dropDownButton);
+            }
 
             let dropdown = item.querySelector('.HeaderMenu__dropdown');
 
-            let dropDownButton = document.createElement('div');
-            dropDownButton.classList.add('dropDownButton');
-            dropDownButton.textContent = '▾';
             dropDownButton.onclick = () =>
             {
                 HideAll(dropDownButton);
@@ -286,7 +291,6 @@ a.episode-col__label:hover
                     dropDownButton.setAttribute('pressed', 'true');
                 }
             };
-            wrapper.append(dropDownButton);
         });
     }
 
