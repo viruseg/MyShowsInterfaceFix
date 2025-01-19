@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Interface fixes on myshows.me
 // @namespace    http://tampermonkey.net/
-// @version      0.16
+// @version      0.17
 // @description  Fixing interface styles on myshows.me
 // @author       viruseg
 // @match        *.myshows.me/*
@@ -116,8 +116,14 @@ a.episode-col__label:hover
 
 .episodes-by-season__season .Row-container
 {
-    padding-left: 20px !important;
     padding-right: 20px !important;
+}
+
+.episodes-by-season__season .Col.RowEpisodeBySeason__number
+{
+    display: flex !important;
+    justify-content: flex-end !important;
+    margin-right: 10px !important;
 }
 
 @media (hover: hover) and (pointer: fine)
