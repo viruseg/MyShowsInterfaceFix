@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Interface fixes on myshows.me
 // @namespace    http://tampermonkey.net/
-// @version      0.14
+// @version      0.15
 // @description  Fixing interface styles on myshows.me
 // @author       viruseg
 // @match        *.myshows.me/*
@@ -153,8 +153,8 @@ a.episode-col__label:hover
 
     function CorrectionOfGrammaticalErrors()
     {
-        let wordsToReplace = ['Смотрящих', 'Смотрящий', 'Смотрящие', 'смотрящих', 'смотрящий', 'смотрящие', 'Смотрят', 'смотрят'];
-        let replacementWords = ['Зрителей', 'Зритель', 'Зрители', 'зрителей', 'зритель', 'зрители', 'Зрители', 'зрители'];
+        let wordsToReplace = ['Смотрящих', 'Смотрящий', 'Смотрящие', 'смотрящих', 'смотрящий', 'смотрящие', 'Смотрят', 'смотрят', 'Посмотрели', 'посмотрели'];
+        let replacementWords = ['Зрителей', 'Зритель', 'Зрители', 'зрителей', 'зритель', 'зрители', 'Зрители', 'зрители', 'Зрители', 'зрители'];
 
         if (wordsToReplace.length !== replacementWords.length)
         {
@@ -178,6 +178,7 @@ a.episode-col__label:hover
                 if (node.textContent.search(regExps[j]) === -1) continue;
 
                 node.textContent = node.textContent.replace(regExps[j], replacementWords[j]);
+                break;
             }
         }
 
