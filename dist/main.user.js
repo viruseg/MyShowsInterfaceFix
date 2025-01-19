@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Interface fixes on myshows.me
 // @namespace    http://tampermonkey.net/
-// @version      0.13
+// @version      0.14
 // @description  Fixing interface styles on myshows.me
 // @author       viruseg
 // @match        *.myshows.me/*
@@ -153,8 +153,8 @@ a.episode-col__label:hover
 
     function CorrectionOfGrammaticalErrors()
     {
-        let wordsToReplace = ['Смотрящих', 'Смотрящий', 'Смотрящие'];
-        let replacementWords = ['Зрителей', 'Зритель', 'Зрители'];
+        let wordsToReplace = ['Смотрящих', 'Смотрящий', 'Смотрящие', 'смотрящих', 'смотрящий', 'смотрящие', 'Смотрят', 'смотрят'];
+        let replacementWords = ['Зрителей', 'Зритель', 'Зрители', 'зрителей', 'зритель', 'зрители', 'Зрители', 'зрители'];
 
         if (wordsToReplace.length !== replacementWords.length)
         {
@@ -169,22 +169,33 @@ a.episode-col__label:hover
             regExps[i] = new RegExp(wordsToReplace[i], 'g');
         }
 
+        function ReplaceText(node)
+        {
+            if (node == null) return;
+
+            for (let j = 0; j < regExps.length; j++)
+            {
+                if (node.textContent.search(regExps[j]) === -1) continue;
+
+                node.textContent = node.textContent.replace(regExps[j], replacementWords[j]);
+            }
+        }
+
         function Replace(nodes)
         {
+            if (nodes == null) return;
+
             for (let i = 0; i < nodes.length; i++)
             {
                 let node = nodes[i];
 
-                for (let j = 0; j < regExps.length; j++)
-                {
-                    if (node.innerText.search(regExps[j]) === -1) continue;
-
-                    node.innerText = node.innerText.replace(regExps[j], replacementWords[j]);
-                }
+                ReplaceText(node);
             }
         }
 
         Replace(document.querySelectorAll('.info-row__title'));
+        Replace(document.querySelectorAll('.ShowsTable .Row.title .Row-container .Col'));
+        ReplaceText(document.querySelector('.SortPanel button.SortPanel__button:last-child')?.firstChild);
     }
 
     function CollapseAll()
@@ -215,6 +226,25 @@ a.episode-col__label:hover
         collapseAllButton.innerText = `Свернуть всё`;
         collapseAllButton.addEventListener('click', CollapseAll);
         menu.append(collapseAllButton);
+    }
+
+    function HidingTheWatchingSection()
+    {
+        if (new URL(window.location.href).pathname !== '/profile/') return;
+
+        let subMenu = document.querySelector('.Page .Page__aside .mb-4');
+
+        if (subMenu === null) return;
+
+        let list = subMenu.querySelector('.List');
+
+        if (list === null) return;
+
+        let asideHeading = subMenu.querySelector('.AsideHeading');
+
+        if (asideHeading === null) return;
+
+        asideHeading.click();
     }
 
     function FixWidthCommentButtons()
@@ -301,6 +331,7 @@ a.episode-col__label:hover
         {
             CorrectionOfGrammaticalErrors();
             AddCollapseAllButton();
+            HidingTheWatchingSection();
             FixWidthCommentButtons();
             HeaderMenuButtonsFix();
         });
