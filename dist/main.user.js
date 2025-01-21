@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Interface fixes on myshows.me
 // @namespace    http://tampermonkey.net/
-// @version      0.17
+// @version      0.18
 // @description  Fixing interface styles on myshows.me
 // @author       viruseg
 // @match        *.myshows.me/*
@@ -339,7 +339,7 @@ a.episode-col__label:hover
         {
             CorrectionOfGrammaticalErrors();
             AddCollapseAllButton();
-            HidingTheWatchingSection();
+            //HidingTheWatchingSection();
             FixWidthCommentButtons();
             HeaderMenuButtonsFix();
         });
