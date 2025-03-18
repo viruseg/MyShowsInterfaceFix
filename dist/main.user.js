@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Interface fixes on myshows.me
 // @namespace    http://tampermonkey.net/
-// @version      0.21
+// @version      0.22
 // @description  Fixing interface styles on myshows.me
 // @author       viruseg
 // @match        *.myshows.me/*
@@ -65,7 +65,8 @@ GM_addStyle(
 }
 
 .EpisodesBySeason__season .MyLabel.corner > .MyLabel__wrapper > .MyLabel__corner,
-.Unwatched-item .MyLabel.corner > .MyLabel__wrapper > .MyLabel__corner
+.Unwatched-item .MyLabel.corner > .MyLabel__wrapper > .MyLabel__corner,
+.Sidebar__item-before .MyLabel.corner > .MyLabel__wrapper > .MyLabel__corner
 {
     color: transparent !important;
     width: 0 !important;
@@ -203,6 +204,21 @@ a.episode-col__label:hover
 .WatchSoon .WatchSoon-header .Row-container .Col:first-child
 {
     max-width: unset !important;
+}
+
+.ProfileNewComments__section .com-comments .MyLabel
+{
+    width: 100%;
+}
+
+.ProfileNav-item:has(.newCommentUrl:hover)
+{
+    text-decoration: none;
+}
+
+.ProfileNav-item .newCommentUrl:hover .MyLabel.corner > .MyLabel__wrapper
+{
+    text-decoration: underline;
 }
 `);
 
@@ -563,6 +579,31 @@ a.episode-col__label:hover
         }
     }
 
+    function ProfileNavCommentsFix()
+    {
+        let nickname = document.querySelector('.HeaderLogin__dropdown > a')?.getAttribute('href');
+
+        if (nickname == null) return;
+
+        let commentsLine = document.querySelector('.ProfileNav > .ProfileNav-item[href="/profile/comments/"]');
+
+        if (commentsLine == null) return;
+
+        commentsLine.classList.add('commentUrl');
+        commentsLine.href = nickname + '/comments/news/';
+
+        let newCommentsNode = commentsLine.querySelector('.MyLabel.corner');
+
+        let newCommentsUrlNode = document.createElement('a');
+        newCommentsUrlNode.classList.add('newCommentUrl');
+        newCommentsUrlNode.href = '/profile/comments/';
+        newCommentsUrlNode.append(newCommentsNode.cloneNode(true));
+
+        newCommentsNode.replaceWith(newCommentsUrlNode);
+
+        commentsLine.replaceWith(commentsLine.cloneNode(true));
+    }
+
 
     function RunAfterDOMLoaded()
     {
@@ -574,6 +615,7 @@ a.episode-col__label:hover
             FixWidthCommentButtons();
             HeaderMenuButtonsFix();
             CalendarFix();
+            ProfileNavCommentsFix();
         });
 
         observer.observe(document.body,
