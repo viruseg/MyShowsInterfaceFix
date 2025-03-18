@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Interface fixes on myshows.me
 // @namespace    http://tampermonkey.net/
-// @version      0.23
+// @version      0.24
 // @description  Fixing interface styles on myshows.me
 // @author       viruseg
 // @match        *.myshows.me/*
@@ -594,12 +594,15 @@ a.episode-col__label:hover
 
         let newCommentsNode = commentsLine.querySelector('.MyLabel.corner');
 
-        let newCommentsUrlNode = document.createElement('a');
-        newCommentsUrlNode.classList.add('newCommentUrl');
-        newCommentsUrlNode.href = '/profile/comments/';
-        newCommentsUrlNode.append(newCommentsNode.cloneNode(true));
+        if (newCommentsNode != null)
+        {
+            let newCommentsUrlNode = document.createElement('a');
+            newCommentsUrlNode.classList.add('newCommentUrl');
+            newCommentsUrlNode.href = '/profile/comments/';
+            newCommentsUrlNode.append(newCommentsNode.cloneNode(true));
 
-        newCommentsNode.replaceWith(newCommentsUrlNode);
+            newCommentsNode.replaceWith(newCommentsUrlNode);
+        }
 
         commentsLine.replaceWith(commentsLine.cloneNode(true));
     }
