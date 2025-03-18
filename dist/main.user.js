@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Interface fixes on myshows.me
 // @namespace    http://tampermonkey.net/
-// @version      0.19
+// @version      0.20
 // @description  Fixing interface styles on myshows.me
 // @author       viruseg
 // @match        *.myshows.me/*
@@ -397,15 +397,37 @@ a.episode-col__label:hover
         if (hasCache)
         {
             if (StrHash(watchSoon.innerHTML) !== cachedWatchSoonHash)
+            {
                 watchSoon.replaceWith(cachedWatchSoon.cloneNode(true));
+
+                let watchSoonItems = Array.from(document.querySelectorAll('.WatchSoon > .WatchSoon-item'));
+
+                watchSoonItems.forEach(watchSoonItem =>
+                {
+                    let header = watchSoonItem.querySelector('.WatchSoon-header');
+                    let episodes = watchSoonItem.querySelector('.WatchSoon-episodes');
+
+                    header.addEventListener('click', () =>
+                    {
+                        if (episodes.style.getPropertyValue('display') === 'none')
+                        {
+                            episodes.style.setProperty('display', 'block');
+                            episodes.style.setProperty('height', 'auto');
+                        }
+                        else
+                        {
+                            episodes.style.setProperty('display', 'none');
+                            episodes.style.setProperty('height', '0');
+                        }
+                    });
+                });
+            }
         }
         else
         {
-            const watchSoonItems = Array.from(document.querySelectorAll('.WatchSoon > .WatchSoon-item'));
-            if (watchSoonItems.length > 0)
-            {
-                watchSoonItems.forEach(watchSoonItem => SortLines(watchSoonItem));
-            }
+            let watchSoonItems = Array.from(document.querySelectorAll('.WatchSoon > .WatchSoon-item'));
+
+            watchSoonItems.forEach(watchSoonItem => SortLines(watchSoonItem));
 
             watchSoon.setAttribute('hasCache', 'true');
             cachedWatchSoon = watchSoon.cloneNode(true);
