@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Interface fixes on myshows.me
 // @namespace    http://tampermonkey.net/
-// @version      0.22
+// @version      0.23
 // @description  Fixing interface styles on myshows.me
 // @author       viruseg
 // @match        *.myshows.me/*
@@ -590,7 +590,7 @@ a.episode-col__label:hover
         if (commentsLine == null) return;
 
         commentsLine.classList.add('commentUrl');
-        commentsLine.href = nickname + '/comments/news/';
+        commentsLine.href = nickname + '/comments/';
 
         let newCommentsNode = commentsLine.querySelector('.MyLabel.corner');
 
