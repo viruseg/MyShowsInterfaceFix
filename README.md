@@ -18,3 +18,11 @@
 
 Кнопка "Свернуть всё"
 ![collapseAllButton.png](Screenshots/collapseAllButton.png)
+
+Календарь
+
+До изменений:
+![exampleOfOldCalendar.png](Screenshots/exampleOfOldCalendar.png)
+
+После изменений:
+![exampleOfNewCalendar.png](Screenshots/exampleOfNewCalendar.png)

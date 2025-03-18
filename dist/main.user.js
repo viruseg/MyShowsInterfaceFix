@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Interface fixes on myshows.me
 // @namespace    http://tampermonkey.net/
-// @version      0.18
+// @version      0.19
 // @description  Fixing interface styles on myshows.me
 // @author       viruseg
 // @match        *.myshows.me/*
@@ -21,13 +21,15 @@ GM_addStyle(
     font-weight: 500 !important;
 }
 
-.Unwatched-season ~ div .UnwatchedEpisodeItem, .RowEpisodeBySeason > .Row-container > div
+.Unwatched-season ~ div .UnwatchedEpisodeItem,
+ .RowEpisodeBySeason > .Row-container > div
 {
     padding-top: 5px !important;
     padding-bottom: 5px !important;
 }
 
-.RowEpisodeBySeason > .Row-container
+.RowEpisodeBySeason > .Row-container,
+.EpisodesBySeason__season .RowEpisodeBySeason
 {
     height: 30px !important;
 }
@@ -43,26 +45,26 @@ GM_addStyle(
     height: 13px !important;
 }
 
-.episodes-by-season__season .MyLabel.corner,
+.EpisodesBySeason__season .MyLabel.corner,
 .Unwatched-item .MyLabel.corner
 {
     text-align: center !important;
 }
 
-.episodes-by-season__season .MyLabel.corner > .MyLabel__wrapper,
+.EpisodesBySeason__season .MyLabel.corner > .MyLabel__wrapper,
 .Unwatched-item .MyLabel.corner > .MyLabel__wrapper
 {
     border-radius: 2px !important;
     background-color: var(--color-gray-170) !important;
 }
 
-.dark-mode .episodes-by-season__season .MyLabel.corner > .MyLabel__wrapper,
+.dark-mode .EpisodesBySeason__season .MyLabel.corner > .MyLabel__wrapper,
 .dark-mode .Unwatched-item .MyLabel.corner > .MyLabel__wrapper
 {
     background-color: var(--comments-label-color) !important;
 }
 
-.episodes-by-season__season .MyLabel.corner > .MyLabel__wrapper > .MyLabel__corner,
+.EpisodesBySeason__season .MyLabel.corner > .MyLabel__wrapper > .MyLabel__corner,
 .Unwatched-item .MyLabel.corner > .MyLabel__wrapper > .MyLabel__corner
 {
     color: transparent !important;
@@ -114,12 +116,12 @@ a.episode-col__label:hover
     padding: 4px 0 !important;
 }
 
-.episodes-by-season__season .Row-container
+.EpisodesBySeason__season .Row-container
 {
     padding-right: 20px !important;
 }
 
-.episodes-by-season__season .Col.RowEpisodeBySeason__number
+.EpisodesBySeason__season .Col.RowEpisodeBySeason__number
 {
     display: flex !important;
     justify-content: flex-end !important;
@@ -151,6 +153,56 @@ a.episode-col__label:hover
 .dropDownButton[pressed="true"]
 {
     color: var(--myshows-color);
+}
+
+.WatchSoon .WatchSoon-dateHidden > a
+{
+    display: none !important;
+}
+
+.WatchSoon .WatchSoon__title-wrapper
+{
+    flex-direction: row !important;
+    align-items: center !important;
+    gap: 10px !important;
+}
+
+.WatchSoon .WatchSoon__title-wrapper > a
+{
+    font-size: var(--main-font-size) !important;
+}
+
+.WatchSoon .WatchSoon-episode
+{
+    margin-top: 0 !important;
+}
+
+.WatchSoon .WatchSoon-date > a
+{
+    display: flex;
+    font-weight: 400;
+    font-size: var(--main-font-size);
+}
+
+.WatchSoon .WatchSoon-date > a div:first-child:after
+{
+    content: ',';
+    margin-right: 5px;
+}
+
+.WatchSoon .WatchSoon-episodes .Row
+{
+    padding-left: 10px;
+}
+
+.WatchSoon .Row-container .Col:first-child
+{
+    max-width: 40px !important;
+}
+
+.WatchSoon .WatchSoon-header .Row-container .Col:first-child
+{
+    max-width: unset !important;
 }
 `);
 
@@ -257,7 +309,7 @@ a.episode-col__label:hover
 
     function FixWidthCommentButtons()
     {
-        const elements = document.querySelectorAll('.episodes-by-season__season .MyLabel.corner, .Unwatched-item .MyLabel.corner');
+        const elements = document.querySelectorAll('.EpisodesBySeason__season .MyLabel.corner, .Unwatched-item .MyLabel.corner');
 
         if (elements.length === 0) return;
 
@@ -332,6 +384,130 @@ a.episode-col__label:hover
         });
     }
 
+    let cachedWatchSoon = null;
+    let cachedWatchSoonHash = 0;
+
+    function CalendarFix()
+    {
+        if (new URL(window.location.href).pathname !== '/profile/next/') return;
+
+        let watchSoon = document.querySelector('.WatchSoon');
+        let hasCache = watchSoon?.getAttribute('hasCache') === 'true';
+
+        if (hasCache)
+        {
+            if (StrHash(watchSoon.innerHTML) !== cachedWatchSoonHash)
+                watchSoon.replaceWith(cachedWatchSoon.cloneNode(true));
+        }
+        else
+        {
+            const watchSoonItems = Array.from(document.querySelectorAll('.WatchSoon > .WatchSoon-item'));
+            if (watchSoonItems.length > 0)
+            {
+                watchSoonItems.forEach(watchSoonItem => SortLines(watchSoonItem));
+            }
+
+            watchSoon.setAttribute('hasCache', 'true');
+            cachedWatchSoon = watchSoon.cloneNode(true);
+            cachedWatchSoonHash = StrHash(cachedWatchSoon.innerHTML);
+        }
+
+        function SortLines(watchSoonItem)
+        {
+            let rows = Array.from(watchSoonItem.querySelectorAll('.WatchSoon-episodes .Row'));
+
+            if (rows.length === 0) return;
+
+            for (let i = 1; i < rows.length; i++)
+            {
+                let row = rows[i];
+                let rowPrev = rows[i - 1];
+                let date = row.querySelector('.WatchSoon-date');
+                let datePrev = rowPrev.querySelector('.WatchSoon-date');
+
+                if (date.textContent === '' && datePrev.textContent !== '') date.replaceWith(datePrev.cloneNode(true));
+            }
+
+            rows.sort((a, b) =>
+            {
+                return CompareRows(a, b);
+            });
+
+            let parent = rows[0].parentElement;
+            rows.forEach(wrapper => parent.appendChild(wrapper));
+
+            for (let i = 1; i < rows.length; i++)
+            {
+                let row = rows[i];
+                let rowPrev = rows[i - 1];
+                let date = row.querySelector('.WatchSoon-date');
+                let datePrev = rowPrev.querySelector('.WatchSoon-date');
+
+                if (date.textContent === datePrev.textContent) date.classList.add('WatchSoon-dateHidden');
+            }
+
+            for (let i = 0; i < rows.length; i++)
+            {
+                let row = rows[i];
+                let episode = row.querySelector('.WatchSoon-episode');
+                let seasonNum = episode.childNodes[0].textContent;
+                let episodeNum = episode.childNodes[2].textContent;
+                let episodeName = episode.childNodes[3].textContent;
+                episodeName = episodeName.replace('-', '—');
+
+                if (seasonNum.length === 1) seasonNum = '0' + seasonNum;
+                if (episodeNum.length === 1) episodeNum = '0' + episodeNum;
+
+                while (episode.firstChild)
+                {
+                    episode.removeChild(episode.firstChild);
+                }
+
+                episode.textContent = 's' + seasonNum + 'e' + episodeNum + episodeName;
+            }
+
+            function CompareRows(a, b)
+            {
+                let aDate = a.querySelector('.WatchSoon-date > a').getAttribute('href');
+                let bDate = b.querySelector('.WatchSoon-date > a').getAttribute('href');
+
+                if (aDate > bDate) return 1;
+                if (aDate < bDate) return -1;
+
+                let aShow = a.querySelector('.WatchSoon__title-wrapper .WatchSoon-show').textContent.trim();
+                let bShow = b.querySelector('.WatchSoon__title-wrapper .WatchSoon-show').textContent.trim();
+
+                if (aShow > bShow) return 1;
+                if (aShow < bShow) return -1;
+
+                let aEpisode = a.querySelector('.WatchSoon__title-wrapper .WatchSoon-episode').textContent.trim();
+                let bEpisode = b.querySelector('.WatchSoon__title-wrapper .WatchSoon-episode').textContent.trim();
+
+                if (aEpisode > bEpisode) return 1;
+                if (aEpisode < bEpisode) return -1;
+
+                return 0;
+            }
+        }
+
+        function StrHash(str, seed = 0)
+        {
+            let h1 = 0xdeadbeef ^ seed, h2 = 0x41c6ce57 ^ seed;
+            for (let i = 0, ch; i < str.length; i++)
+            {
+                ch = str.charCodeAt(i);
+                h1 = Math.imul(h1 ^ ch, 2654435761);
+                h2 = Math.imul(h2 ^ ch, 1597334677);
+            }
+            h1 = Math.imul(h1 ^ (h1 >>> 16), 2246822507);
+            h1 ^= Math.imul(h2 ^ (h2 >>> 13), 3266489909);
+            h2 = Math.imul(h2 ^ (h2 >>> 16), 2246822507);
+            h2 ^= Math.imul(h1 ^ (h1 >>> 13), 3266489909);
+
+            return 4294967296 * (2097151 & h2) + (h1 >>> 0);
+        }
+    }
+
 
     function RunAfterDOMLoaded()
     {
@@ -342,6 +518,7 @@ a.episode-col__label:hover
             //HidingTheWatchingSection();
             FixWidthCommentButtons();
             HeaderMenuButtonsFix();
+            CalendarFix();
         });
 
         observer.observe(document.body,
