@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Interface fixes on myshows.me
 // @namespace    http://tampermonkey.net/
-// @version      0.20
+// @version      0.21
 // @description  Fixing interface styles on myshows.me
 // @author       viruseg
 // @match        *.myshows.me/*
@@ -288,9 +288,17 @@ a.episode-col__label:hover
         menu.append(collapseAllButton);
     }
 
+    let watchingSectionIsClosed = false;
+
     function HidingTheWatchingSection()
     {
-        if (new URL(window.location.href).pathname !== '/profile/') return;
+        if (new URL(window.location.href).pathname !== '/profile/')
+        {
+            watchingSectionIsClosed = false;
+            return;
+        }
+
+        if (watchingSectionIsClosed) return;
 
         let subMenu = document.querySelector('.Page .Page__aside .mb-4');
 
@@ -300,9 +308,34 @@ a.episode-col__label:hover
 
         if (list === null) return;
 
+        {
+            let observer = new MutationObserver((mutationsList) =>
+            {
+                for (let mutation of mutationsList)
+                {
+                    if (mutation.type === 'childList')
+                    {
+                        mutation.removedNodes.forEach((node) =>
+                        {
+                            if (node === list) watchingSectionIsClosed = true;
+                        });
+                    }
+                }
+            });
+
+            let config = { childList: true };
+            observer.observe(subMenu, config);
+        }
+
         let asideHeading = subMenu.querySelector('.AsideHeading');
 
         if (asideHeading === null) return;
+
+        if (list.childElementCount === 0)
+        {
+            watchingSectionIsClosed = true;
+            return;
+        }
 
         asideHeading.click();
     }
@@ -537,7 +570,7 @@ a.episode-col__label:hover
         {
             CorrectionOfGrammaticalErrors();
             AddCollapseAllButton();
-            //HidingTheWatchingSection();
+            HidingTheWatchingSection();
             FixWidthCommentButtons();
             HeaderMenuButtonsFix();
             CalendarFix();
