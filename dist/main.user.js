@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Interface fixes on myshows.me
 // @namespace    http://tampermonkey.net/
-// @version      0.25
+// @version      0.26
 // @description  Fixing interface styles on myshows.me
 // @author       viruseg
 // @match        *.myshows.me/*
@@ -244,35 +244,67 @@ a.episode-col__label:hover
             regExps[i] = new RegExp(wordsToReplace[i], 'g');
         }
 
-        function ReplaceText(node)
+        function ReplaceText(textNode)
         {
-            if (node == null) return;
+            if (textNode == null || textNode.nodeType !== Node.TEXT_NODE) return;
 
             for (let j = 0; j < regExps.length; j++)
             {
-                if (node.textContent.search(regExps[j]) === -1) continue;
+                if (textNode.textContent.search(regExps[j]) === -1) continue;
 
-                node.textContent = node.textContent.replace(regExps[j], replacementWords[j]);
+                textNode.textContent = textNode.textContent.replace(regExps[j], replacementWords[j]);
                 break;
             }
         }
 
-        function Replace(nodes)
+        function Replace(node)
         {
-            if (nodes == null) return;
+            if (node == null) return;
 
-            for (let i = 0; i < nodes.length; i++)
+            for (let i = 0; i < node.childNodes.length; i++)
             {
-                let node = nodes[i];
+                let childNode = node.childNodes[i];
 
-                ReplaceText(node);
+                if (node.nodeType === Node.ELEMENT_NODE)
+                {
+                    Replace(childNode);
+                    continue;
+                }
+
+                if (node.nodeType === Node.TEXT_NODE)
+                {
+                    ReplaceText(childNode);
+                    continue;
+                }
             }
         }
 
-        Replace(document.querySelectorAll('.info-row__title'));
-        Replace(document.querySelectorAll('.ShowsTable .Row.title .Row-container .Col'));
-        Replace(document.querySelectorAll('.Filters .SearchFilter .SearchFilter__title'));
-        ReplaceText(document.querySelector('.SortPanel button.SortPanel__button:last-child')?.firstChild);
+        function ReplaceInArray(nodeArray)
+        {
+            if (nodeArray == null) return;
+
+            for (let i = 0; i < nodeArray.length; i++)
+            {
+                let node = nodeArray[i];
+
+                if (node.nodeType === Node.ELEMENT_NODE)
+                {
+                    Replace(node);
+                    continue;
+                }
+
+                if (node.nodeType === Node.TEXT_NODE)
+                {
+                    ReplaceText(node);
+                    continue;
+                }
+            }
+        }
+
+        ReplaceInArray(document.querySelectorAll('.info-row__title'));
+        ReplaceInArray(document.querySelectorAll('.ShowsTable .Row.title .Row-container .Col'));
+        ReplaceInArray(document.querySelectorAll('.Filters .SearchFilter .SearchFilter__title'));
+        Replace(document.querySelector('.SortPanel button.SortPanel__button:last-child')?.firstChild);
     }
 
     function CollapseAll()
