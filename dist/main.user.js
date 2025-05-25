@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Interface fixes on myshows.me
 // @namespace    http://tampermonkey.net/
-// @version      0.24
+// @version      0.25
 // @description  Fixing interface styles on myshows.me
 // @author       viruseg
 // @match        *.myshows.me/*
@@ -271,6 +271,7 @@ a.episode-col__label:hover
 
         Replace(document.querySelectorAll('.info-row__title'));
         Replace(document.querySelectorAll('.ShowsTable .Row.title .Row-container .Col'));
+        Replace(document.querySelectorAll('.Filters .SearchFilter .SearchFilter__title'));
         ReplaceText(document.querySelector('.SortPanel button.SortPanel__button:last-child')?.firstChild);
     }
 
