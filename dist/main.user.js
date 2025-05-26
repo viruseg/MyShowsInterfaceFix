@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Interface fixes on myshows.me
 // @namespace    http://tampermonkey.net/
-// @version      0.26
+// @version      0.27
 // @description  Fixing interface styles on myshows.me
 // @author       viruseg
 // @match        *.myshows.me/*
@@ -131,7 +131,7 @@ a.episode-col__label:hover
 
 @media (hover: hover) and (pointer: fine)
 {
-    .HeaderMenu__item:not(.HeaderMenu__item--disabled):hover .HeaderMenu__dropdown,
+    .HeaderMenu__item:not(.HeaderMenu__item--disabled):hover .HeaderMenuDropdown,
     .HeaderMenu__item:not(.HeaderMenu__item--disabled):hover .HeaderMenu__link-wrapper:after
     {
         opacity: 0 !important;
@@ -444,7 +444,7 @@ a.episode-col__label:hover
                 wrapper.append(dropDownButton);
             }
 
-            let dropdown = item.querySelector('.HeaderMenu__dropdown');
+            let dropdown = item.querySelector('.HeaderMenuDropdown');
 
             dropDownButton.onclick = () =>
             {
