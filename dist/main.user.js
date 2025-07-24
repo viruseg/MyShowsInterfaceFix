@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Interface fixes on myshows.me
 // @namespace    http://tampermonkey.net/
-// @version      0.27
+// @version      0.28
 // @description  Fixing interface styles on myshows.me
 // @author       viruseg
 // @match        *.myshows.me/*
@@ -16,7 +16,8 @@
 
 GM_addStyle(
 `
-.Unwatched-showTitle-title
+.Unwatched-showTitle-title,
+.UnwatchedShows__show-title
 {
     font-weight: 500 !important;
 }
