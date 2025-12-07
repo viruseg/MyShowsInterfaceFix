@@ -398,9 +398,14 @@ a.episode-col__label:hover
 
     function FixWidthCommentButtons()
     {
-        const elements = document.querySelectorAll('.EpisodesBySeason__season .MyLabel.corner, .Unwatched-item .MyLabel.corner');
+        const elements = document.querySelectorAll('.Unwatched__item .MyLabel.corner, .EpisodesBySeason__season .MyLabel.corner, .Unwatched-item .MyLabel.corner');
 
         if (elements.length === 0) return;
+
+        elements.forEach(element =>
+        {
+            element.style.width = null;
+        });
 
         let maxWidth = 0;
         elements.forEach(element =>
