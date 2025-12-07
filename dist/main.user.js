@@ -316,7 +316,7 @@ a.episode-col__label:hover
 
     function CollapseAll()
     {
-        let nodes = document.querySelectorAll('.Col.center.all:has(> .SvgSpriteIcon.Unwatched-toggler.collapsed)');
+        let nodes = document.querySelectorAll('.Col.center.all:has(> .SvgSpriteIcon.Unwatched__toggler.collapsed)');
 
         nodes.forEach(function(element)
         {
