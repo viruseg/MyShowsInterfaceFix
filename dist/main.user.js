@@ -80,6 +80,17 @@ GM_addStyle(
     border: unset !important;
 }
 
+.MyLabel.EpisodeCol__label.special
+ {
+    order: -1;
+    margin-right: 4px;
+}
+
+.EpisodesBySeason__season .RowEpisodeBySeason__status.RowEpisodeBySeason__status
+{
+    max-width: 130px !important;
+}
+
 .episode-col
 {
     font-size: 14px !important;
