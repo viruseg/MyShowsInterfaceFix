@@ -16,12 +16,14 @@
 
 GM_addStyle(
 `
+.Unwatched__show-title,
 .Unwatched-showTitle-title,
 .UnwatchedShows__show-title
 {
     font-weight: 500 !important;
 }
 
+.Unwatched__season ~ div .UnwatchedEpisodeItem,
 .Unwatched-season ~ div .UnwatchedEpisodeItem,
  .RowEpisodeBySeason > .Row-container > div
 {
@@ -46,12 +48,14 @@ GM_addStyle(
     height: 13px !important;
 }
 
+.Unwatched__item .MyLabel.corner,
 .EpisodesBySeason__season .MyLabel.corner,
 .Unwatched-item .MyLabel.corner
 {
     text-align: center !important;
 }
 
+.Unwatched__item .MyLabel.corner > .MyLabel__wrapper,
 .EpisodesBySeason__season .MyLabel.corner > .MyLabel__wrapper,
 .Unwatched-item .MyLabel.corner > .MyLabel__wrapper
 {
@@ -59,12 +63,14 @@ GM_addStyle(
     background-color: var(--color-gray-170) !important;
 }
 
+.dark-mode .Unwatched__item .MyLabel.corner > .MyLabel__wrapper,
 .dark-mode .EpisodesBySeason__season .MyLabel.corner > .MyLabel__wrapper,
 .dark-mode .Unwatched-item .MyLabel.corner > .MyLabel__wrapper
 {
     background-color: var(--comments-label-color) !important;
 }
 
+.Unwatched__item .MyLabel.corner > .MyLabel__wrapper > .MyLabel__corner,
 .EpisodesBySeason__season .MyLabel.corner > .MyLabel__wrapper > .MyLabel__corner,
 .Unwatched-item .MyLabel.corner > .MyLabel__wrapper > .MyLabel__corner,
 .Sidebar__item-before .MyLabel.corner > .MyLabel__wrapper > .MyLabel__corner
