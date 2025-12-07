@@ -272,13 +272,13 @@ a.episode-col__label:hover
             {
                 let childNode = node.childNodes[i];
 
-                if (node.nodeType === Node.ELEMENT_NODE)
+                if (childNode.nodeType === Node.ELEMENT_NODE)
                 {
                     Replace(childNode);
                     continue;
                 }
 
-                if (node.nodeType === Node.TEXT_NODE)
+                if (childNode.nodeType === Node.TEXT_NODE)
                 {
                     ReplaceText(childNode);
                     continue;
