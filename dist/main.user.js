@@ -31,6 +31,11 @@ GM_addStyle(
     padding-bottom: 5px !important;
 }
 
+.EpisodesBySeason__episode
+{
+    min-height: 30px !important;
+}
+
 .RowEpisodeBySeason > .Row-container,
 .EpisodesBySeason__season .RowEpisodeBySeason
 {
@@ -60,7 +65,6 @@ GM_addStyle(
 .Unwatched-item .MyLabel.corner > .MyLabel__wrapper
 {
     border-radius: 2px !important;
-    background-color: var(--color-gray-170) !important;
 }
 
 .dark-mode .Unwatched__item .MyLabel.corner > .MyLabel__wrapper,
@@ -319,6 +323,7 @@ a.episode-col__label:hover
             }
         }
 
+        ReplaceInArray(document.querySelectorAll('.InfoRow__title'));
         ReplaceInArray(document.querySelectorAll('.info-row__title'));
         ReplaceInArray(document.querySelectorAll('.ShowsTable .Row.title .Row-container .Col'));
         ReplaceInArray(document.querySelectorAll('.Filters .SearchFilter .SearchFilter__title'));
