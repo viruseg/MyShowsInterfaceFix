@@ -323,6 +323,7 @@ a.episode-col__label:hover
             }
         }
 
+        ReplaceInArray(document.querySelectorAll('.SortPanelItem'));
         ReplaceInArray(document.querySelectorAll('.InfoRow__title'));
         ReplaceInArray(document.querySelectorAll('.info-row__title'));
         ReplaceInArray(document.querySelectorAll('.ShowsTable .Row.title .Row-container .Col'));
